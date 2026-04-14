@@ -34,6 +34,7 @@ public class ClientInitializationTests
 
         // Assert
         Assert.NotNull(client);
-        Assert.IsType<CheckViesClient>(client);
+        var concreteClient = Assert.IsType<CheckViesClient>(client);
+        Assert.Equal(ApiKey, concreteClient.ApiKey);
     }
 }

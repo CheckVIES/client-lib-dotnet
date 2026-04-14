@@ -23,7 +23,14 @@ public static class ServiceCollectionExtensions
         if (string.IsNullOrEmpty(apiKey))
             throw new ArgumentException("API key must be provided.", nameof(apiKey));
 
-        services.AddHttpClient<ICheckViesClient, CheckViesClient>(client => client.BaseAddress = new Uri(baseUrl));
+        services.AddHttpClient<ICheckViesClient, CheckViesClient>(client =>
+        {
+            client.BaseAddress = new Uri(baseUrl);
+            return new CheckViesClient(client)
+            {
+                ApiKey = apiKey
+            };
+        });
 
         return services;
     }
