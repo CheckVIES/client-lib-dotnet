@@ -66,8 +66,6 @@ jobs:
           path: ${{ env.PACKAGE_OUTPUT_DIRECTORY }}
       - name: 'Push package'
         run: dotnet nuget push ${{ env.PACKAGE_OUTPUT_DIRECTORY }}/*.nupkg -k ${{ secrets.NUGET_AUTH_TOKEN }} -s ${{ env.NUGET_SOURCE_URL }}
-      - name: 'Push package sources'
-        run: dotnet nuget push ${{ env.PACKAGE_OUTPUT_DIRECTORY }}/*.snupkg -k ${{ secrets.NUGET_AUTH_TOKEN }} -s ${{ env.NUGET_SOURCE_URL }}
       - name: 'Attach package to release'
         run: gh release upload ${{ github.event.release.tag_name }} ${{ env.PACKAGE_OUTPUT_DIRECTORY }}/*
         env:
