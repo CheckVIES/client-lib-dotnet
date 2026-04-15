@@ -17,7 +17,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Setup .NET
         uses: actions/setup-dotnet@v5
         with:
@@ -41,24 +41,26 @@ jobs:
         run: ls -l ${{ env.PACKAGE_OUTPUT_DIRECTORY }}/*.nupkg
       - name: 'Upload package artifact'
         if: ${{ github.event_name == 'release' && success() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: package
           retention-days: 5
-          path: ${{ env.PACKAGE_OUTPUT_DIRECTORY }}/*.nupkg
+          path: |
+            ${{ env.PACKAGE_OUTPUT_DIRECTORY }}/*.nupkg
+            ${{ env.PACKAGE_OUTPUT_DIRECTORY }}/*.snupkg
 
   release:
     needs: build
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'release' }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Setup .NET
         uses: actions/setup-dotnet@v5
         with:
           dotnet-version: ${{ env.DOTNET_VER }}
       - name: 'Download package artifact'
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: package
           path: ${{ env.PACKAGE_OUTPUT_DIRECTORY }}
